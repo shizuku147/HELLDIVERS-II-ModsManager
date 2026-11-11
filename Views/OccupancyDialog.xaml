@@ -1,0 +1,104 @@
+<Window x:Class="HD2MM.Views.OccupancyDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:m="clr-namespace:HD2MM.Models"
+        Title="占用检查"
+        Width="600" Height="580"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        ShowInTaskbar="False"
+        Background="{StaticResource HdBg}"
+        FontFamily="Segoe UI, Microsoft YaHei UI"
+        TextOptions.TextFormattingMode="Display">
+  <shell:WindowChrome.WindowChrome>
+    <shell:WindowChrome CaptionHeight="30" GlassFrameThickness="0" CornerRadius="0" ResizeBorderThickness="0" UseAeroCaptionButtons="False" />
+  </shell:WindowChrome.WindowChrome>
+
+  <Grid Margin="20,52,20,20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <TextBlock Text="装备占用" FontSize="14" FontWeight="SemiBold"
+               Foreground="{StaticResource HdAccent}" />
+
+    <TextBlock x:Name="SummaryText" Grid.Row="1" FontSize="10" Margin="0,6,0,0"
+               TextWrapping="Wrap" Foreground="{StaticResource HdTextMuted}" />
+
+    <Border Grid.Row="2" Margin="0,10,0,0" Padding="10,8" CornerRadius="6"
+            Background="#1A2A2A2A" BorderBrush="{StaticResource HdBorder}" BorderThickness="1">
+      <TextBlock FontSize="10" TextWrapping="Wrap" LineHeight="17"
+                 Foreground="{StaticResource HdTextMuted}"
+                 Text="💡 只要给模组写了备注，占用检测就只认备注里的代号（如 SR-24）；本地模组必须写备注才会纳入。" />
+    </Border>
+
+    <Border Grid.Row="3" Margin="0,12,0,0" Background="{StaticResource HdSurface}"
+            BorderBrush="{StaticResource HdBorder}" BorderThickness="1" CornerRadius="8">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="12,8">
+        <ItemsControl x:Name="UsageList">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="{x:Type m:WeaponUsage}">
+              <Grid Margin="0,5">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="86" />
+                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="92" />
+                  <ColumnDefinition Width="1" />
+                  <ColumnDefinition Width="92" />
+                  <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Ellipse Width="9" Height="9" VerticalAlignment="Center" Margin="0,0,10,0"
+                         Fill="{Binding StatusBrush}" />
+                <TextBlock Grid.Column="1" Text="{Binding Code}" FontSize="12" FontWeight="SemiBold"
+                           Foreground="{StaticResource HdText}" VerticalAlignment="Center" />
+                <TextBlock Grid.Column="2" Text="{Binding OwnerText}" FontSize="11"
+                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
+                           Foreground="{StaticResource HdTextMuted}" />
+
+                <Button Grid.Column="3" Content="{Binding TagText}" Click="OnTagClick" Tag="{Binding}"
+                        Style="{StaticResource GhostButton}" FontSize="10" Padding="8,2"
+                        Foreground="{Binding TagBrush}" HorizontalAlignment="Center"
+                        ToolTip="点击选择标签">
+                  <Button.ContextMenu>
+                    <ContextMenu Style="{StaticResource HdContextMenu}">
+                      <MenuItem Header="护甲" Tag="护甲" Style="{StaticResource HdMenuItem}" Click="OnTagPick" />
+                      <MenuItem Header="武器" Tag="武器" Style="{StaticResource HdMenuItem}" Click="OnTagPick" />
+
+                      <Separator Style="{StaticResource HdSeparator}" />
+                      <MenuItem Header="清除标签" Tag="" Style="{StaticResource HdMenuItem}" Click="OnTagPick" />
+                    </ContextMenu>
+                  </Button.ContextMenu>
+                </Button>
+
+                <Border Grid.Column="4" Width="1" Height="14"
+                        Background="{StaticResource HdBorder}" VerticalAlignment="Center" />
+
+                <TextBlock Grid.Column="5" Text="{Binding StatusText}" FontSize="10"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="{StaticResource HdTextMuted}" />
+
+                <Button Grid.Column="6" Content="✕" Style="{StaticResource GhostButton}"
+                        FontSize="9" Padding="5,1" Margin="8,0,0,0" Tag="{Binding}"
+                        Foreground="#8A8A8A" Click="OnDeleteEntry" ToolTip="从列表移除" />
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </Border>
+
+    <Button Grid.Row="4" Content="重新扫描" Style="{StaticResource GhostButton}" Width="88"
+            HorizontalAlignment="Left" Margin="0,14,0,0" Click="OnRescan"
+            ToolTip="重新读取模组库并重算占用" />
+
+    <Button Grid.Row="4" Content="关闭" Style="{StaticResource AccentButton}" Width="88"
+            HorizontalAlignment="Right" Margin="0,14,0,0" Click="OnClose" />
+  </Grid>
+</Window>

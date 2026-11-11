@@ -1,0 +1,39 @@
+<Window x:Class="HD2MM.Views.DoneDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="完成"
+        Width="420" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Background="{StaticResource HdBg}"
+        FontFamily="Segoe UI, Microsoft YaHei UI"
+        TextOptions.TextFormattingMode="Display">
+  <shell:WindowChrome.WindowChrome>
+    <shell:WindowChrome CaptionHeight="30" GlassFrameThickness="0" CornerRadius="0" ResizeBorderThickness="0" UseAeroCaptionButtons="False" />
+  </shell:WindowChrome.WindowChrome>
+
+  <Grid Margin="20,50,20,20">
+    <StackPanel>
+      <Border Width="230" HorizontalAlignment="Center" CornerRadius="10"
+              BorderBrush="{StaticResource HdAccent}" BorderThickness="2" Padding="3">
+        <Image Source="/Assets/done.webp" Width="224" Height="206" Stretch="UniformToFill">
+          <Image.Clip>
+            <RectangleGeometry Rect="0,0,224,206" RadiusX="8" RadiusY="8" />
+          </Image.Clip>
+        </Image>
+      </Border>
+
+      <TextBlock Text="应用完成" FontSize="20" FontWeight="Bold" Margin="0,14,0,0"
+                 HorizontalAlignment="Center" Foreground="{StaticResource HdAccent}" />
+
+      <TextBlock x:Name="SummaryText" FontSize="11" Margin="0,8,0,0" TextAlignment="Center"
+                 TextWrapping="Wrap" Foreground="{StaticResource HdTextMuted}" />
+
+      <Button Content="好耶" Style="{StaticResource AccentButton}" Width="120"
+              HorizontalAlignment="Center" Margin="0,18,0,0" Click="OnClose" />
+    </StackPanel>
+  </Grid>
+</Window>

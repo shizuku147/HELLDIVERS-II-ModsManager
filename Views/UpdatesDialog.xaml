@@ -1,0 +1,92 @@
+<Window x:Class="HD2MM.Views.UpdatesDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:m="clr-namespace:HD2MM.Models"
+        Title="模组更新"
+        Width="560" Height="480"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        ShowInTaskbar="False"
+        Background="{StaticResource HdBg}"
+        FontFamily="Segoe UI, Microsoft YaHei UI"
+        TextOptions.TextFormattingMode="Display">
+  <shell:WindowChrome.WindowChrome>
+    <shell:WindowChrome CaptionHeight="30" GlassFrameThickness="0" CornerRadius="0" ResizeBorderThickness="0" UseAeroCaptionButtons="False" />
+  </shell:WindowChrome.WindowChrome>
+
+  <Grid Margin="20,52,20,20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <TextBlock Text="发现可用更新" FontSize="14" FontWeight="SemiBold"
+               Foreground="{StaticResource HdAccent}" />
+
+    <TextBlock Grid.Row="1" Text="点「打开网页」去 N 网下载新版本，然后把压缩包拖进主界面覆盖导入即可。"
+               FontSize="10" Margin="0,6,0,0" TextWrapping="Wrap"
+               Foreground="{StaticResource HdTextMuted}" />
+
+    <Border Grid.Row="2" Margin="0,12,0,0" Background="{StaticResource HdSurface}"
+            BorderBrush="{StaticResource HdBorder}" BorderThickness="1" CornerRadius="8">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10">
+        <ItemsControl x:Name="UpdateList">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="{x:Type m:UpdateInfo}">
+              <Border BorderBrush="{StaticResource HdBorder}" BorderThickness="0,0,0,1" Padding="6,10">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+
+                  <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="SemiBold"
+                               TextWrapping="Wrap" Foreground="{StaticResource HdText}" />
+                    <TextBlock FontSize="10" Margin="0,2,0,0"
+                               Foreground="{StaticResource HdTextMuted}">
+                      <Run Text="{Binding NexusText, Mode=OneWay}" />
+                      <Run Text="  ·  " />
+                      <Run Text="{Binding VersionText, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock Text="{Binding NoteText}" FontSize="10" Margin="0,2,0,0"
+                               Foreground="{StaticResource HdAccent}">
+                      <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                          <Setter Property="Visibility" Value="Visible" />
+                          <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasNote}" Value="False">
+                              <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                          </Style.Triggers>
+                        </Style>
+                      </TextBlock.Style>
+                    </TextBlock>
+                  </StackPanel>
+
+                  <Button Grid.Column="2" Content="打开网页" Style="{StaticResource GhostButton}"
+                          FontSize="10" Padding="8,3" Margin="0,0,6,0"
+                          Click="OnOpenPage" Tag="{Binding Url}" />
+                  <Button Grid.Column="3" Content="忽略" Style="{StaticResource GhostButton}"
+                          FontSize="10" Padding="8,3"
+                          Click="OnIgnore" Tag="{Binding}" />
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </Border>
+
+    <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+      <Button Content="全部忽略" Style="{StaticResource GhostButton}" Width="88" Margin="0,0,8,0"
+              Click="OnIgnoreAll" />
+      <Button Content="关闭" Style="{StaticResource AccentButton}" Width="88" Click="OnClose" />
+    </StackPanel>
+  </Grid>
+</Window>
