@@ -1,8 +1,8 @@
+![Luna My Master](docs/banner.png)
+
 # Luna My Master
 
 《绝地潜兵 2》的模组管理器 —— 把 mod 库、层链诊断、应用/还原做成一个黑黄配色的桌面工具。
-
-![](docs/preview-m4.png)
 
 ## 它能做什么
 
@@ -19,15 +19,13 @@
 
 ### 1. 拿到程序
 
-两种方式选一个：
+**A. 直接下载（推荐）**
 
-**A. 直接下载（如果已发布）**
+- [下载 LunaMyMaster.exe](https://github.com/shizuku147/HELLDIVERS-II-Mods-Manager-2-/releases/download/V1.0.0/LunaMyMaster.exe)（V1.0.0，约 415 KB）
+- 下载后放到任意文件夹，双击即用 —— 例如 `D:\Tools\LunaMyMaster\`
+- 电脑需要 **Windows 10/11** + **.NET 9 桌面运行时**（[下载](https://dotnet.microsoft.com/download/dotnet/9.0)）
 
-- 到 [Releases](https://github.com/shizuku147/HELLDIVERS-II-Mods-Manager-2-/releases) 看看有没有已上传的 `LunaMyMaster.exe`
-- 有就下载，放到任意文件夹（例如 `D:\Tools\LunaMyMaster\`）
-- 需要 **Windows 10/11** + **.NET 9 桌面运行时**（[下载](https://dotnet.microsoft.com/download/dotnet/9.0)）
-
-**B. 自己构建（一定可用）**
+**B. 自己构建**
 
 ```powershell
 git clone git@github.com:shizuku147/HELLDIVERS-II-Mods-Manager-2-.git
@@ -61,6 +59,10 @@ dotnet publish HD2MM.csproj -c Release -r win-x64 --self-contained false `
 - 换一套 mod：关掉旧的、打开新的，再点一次「应用更改」
 - 想回官方原版：点左下角红色的「恢复原版」
 - **应用更改前请关闭游戏**（程序也会检查，游戏在跑时会拒绝部署）
+
+## 界面预览
+
+![](docs/preview-m4.png)
 
 ## 文件与部署位置
 
