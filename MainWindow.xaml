@@ -146,6 +146,9 @@
                     Command="{Binding InspectLayersCommand}" />
             <Button Content="占用检查" Style="{StaticResource NavButton}"
                     Command="{Binding InspectOccupancyCommand}" />
+            <Button Content="设置目录" Style="{StaticResource NavButton}"
+                    Command="{Binding SetupDirectoriesCommand}"
+                    ToolTip="重新选择游戏目录与模组库" />
             <Button Content="设置 API Key" Style="{StaticResource NavButton}"
                     Command="{Binding ApiKeyCommand}" />
             <Button Content="检查更新" Style="{StaticResource NavButton}"

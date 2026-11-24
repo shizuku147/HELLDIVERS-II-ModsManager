@@ -137,6 +137,9 @@ public partial class MainWindow : Window
 
         if (DataContext is MainWindowViewModel vm)
         {
+            if (vm.NeedsSetup)
+                vm.SetupDirectories();
+
             vm.AutoCheckUpdates();
             vm.RefreshNexusInfo();
         }

@@ -45,6 +45,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
     public ICommand ApiKeyCommand { get; }
     public ICommand RestoreVanillaCommand { get; }
     public ICommand ToggleCloseBehaviorCommand { get; }
+    public ICommand SetupDirectoriesCommand { get; }
 
     public bool CloseToTray
     {
@@ -178,6 +179,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
         CheckUpdatesCommand = new RelayCommand(_ => _ = CheckUpdatesAsync(true));
         RestoreVanillaCommand = new RelayCommand(_ => RestoreVanilla());
         ToggleCloseBehaviorCommand = new RelayCommand(_ => CloseToTray = !CloseToTray);
+        SetupDirectoriesCommand = new RelayCommand(_ => SetupDirectories());
         SetFilterCommand = new RelayCommand(p => SetFilter(p as string));
         InspectLayersCommand = new RelayCommand(_ => InspectLayers());
         InspectOccupancyCommand = new RelayCommand(_ => InspectOccupancy());
@@ -288,6 +290,62 @@ public class MainWindowViewModel : INotifyPropertyChanged
         else _settings.Tags[usage.Code] = tag;
 
         AppState.Save(_settings);
+    }
+
+    public bool NeedsSetup =>
+        string.IsNullOrWhiteSpace(_settings.GameDir) || string.IsNullOrWhiteSpace(_settings.ModsDir);
+
+    /// <summary>First-run wizard: pick the game folder, then the mod library.</summary>
+    public void SetupDirectories()
+    {
+        var game = AskFolder("选择游戏目录（里面应有 data 文件夹）", _settings.GameDir);
+        if (game is null) return;
+
+        if (!Directory.Exists(Path.Combine(game, "data")))
+        {
+            var proceed = ConfirmDialog.Show(Application.Current.MainWindow, "目录可能不对",
+                $"在「{game}」里没有找到 data 文件夹。\n\n确定这是《绝地潜兵 2》的游戏根目录吗？",
+                "就这样用", "重新选");
+
+            if (!proceed) return;
+        }
+
+        var mods = AskFolder("选择模组库目录（存放解压后的 mod，可新建）", _settings.ModsDir);
+        if (mods is null) return;
+
+        try
+        {
+            Directory.CreateDirectory(mods);
+        }
+        catch (Exception ex)
+        {
+            StatusLine = "无法创建模组库：" + ex.Message;
+            return;
+        }
+
+        _settings.GameDir = game;
+        _settings.ModsDir = mods;
+        AppState.Save(_settings);
+
+        Load();
+        StatusLine = $"目录已设置：模组库 {mods}";
+    }
+
+    private static string? AskFolder(string title, string initial)
+    {
+        using var dialog = new System.Windows.Forms.FolderBrowserDialog
+        {
+            Description = title,
+            UseDescriptionForTitle = true,
+            ShowNewFolderButton = true,
+        };
+
+        if (!string.IsNullOrWhiteSpace(initial) && Directory.Exists(initial))
+            dialog.SelectedPath = initial;
+
+        return dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK
+            ? dialog.SelectedPath
+            : null;
     }
 
     private void InspectLayers()
